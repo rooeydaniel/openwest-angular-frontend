@@ -1,0 +1,40 @@
+body {
+    padding-top: 50px;
+}
+
+.starter-template {
+    padding: 40px 15px;
+    text-align: center;
+}
+
+.starter-template .table-striped td {
+	text-align: left;
+}
+
+.starter-template h2.dashboard {
+	text-align: left;
+}
+
+.starter-template .table-striped th.priority {
+	width: 10%;
+}
+
+.starter-template .table-striped th.taskname {
+	width: 70%;
+}
+
+.starter-template .table-striped th.duedate {
+	width: 20%;
+}
+
+.starter-template .table-striped td.priority {
+	width: 10%;
+}
+
+.starter-template .table-striped td.taskname {
+	width: 70%;
+}
+
+.starter-template .table-striped td.duedate {
+	width: 20%;
+}
