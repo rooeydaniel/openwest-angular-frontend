@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" ng-app="TaskApp">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,6 +11,9 @@
 
         <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet"/>
         <link href="css/app.css" rel="stylesheet"/>
+
+        <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.16/angular.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.16/angular-route.js"></script>
     </head>
 
     <body>
@@ -33,118 +36,13 @@
             </div>
         </div>
 
-        <div class="container">
-			<div class="starter-template">
-				<h2 class="dashboard">Overdue Tasks</h2>
-				
-				<table class="table table-striped">
-					<thead>
-						<tr>
-							<th class="priority">Priority</th>
-							<th class="taskname">Task Name</th>
-							<th class="duedate">Due Date</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td class="priority">1</td>
-							<td class="taskname">Test Task Name</td>
-							<td class="duedate">May 6</td>
-						</tr>
-						<tr>
-							<td class="priority">1</td>
-							<td class="taskname">Test Task Name</td>
-							<td class="duedate">May 6</td>
-						</tr>
-						<tr>
-							<td class="priority">2</td>
-							<td class="taskname">Test Task Name</td>
-							<td class="duedate">May 6</td>
-						</tr>
-					</tbody>
-				</table>
-				
-				<h2 class="dashboard">Tasks Due Today</h2>
-				
-				<table class="table table-striped">
-					<thead>
-						<tr>
-							<th class="priority">Priority</th>
-							<th class="taskname">Task Name</th>
-							<th class="duedate">Due Date</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td class="priority">1</td>
-							<td class="taskname">Test Task Name</td>
-							<td class="duedate">May 9</td>
-						</tr>
-						<tr>
-							<td class="priority">1</td>
-							<td class="taskname">Test Task Name</td>
-							<td class="duedate">May 9</td>
-						</tr>
-						<tr>
-							<td class="priority">2</td>
-							<td class="taskname">Test Task Name</td>
-							<td class="duedate">May 9</td>
-						</tr>
-					</tbody>
-				</table>
-				
-				<h2 class="dashboard">Tasks Due Tomorrow</h2>
-				
-				<table class="table table-striped">
-					<thead>
-						<tr>
-							<th class="priority">Priority</th>
-							<th class="taskname">Task Name</th>
-							<th class="duedate">Due Date</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td class="priority">1</td>
-							<td class="taskname">Test Task Name</td>
-							<td class="duedate">May 10</td>
-						</tr>
-						<tr>
-							<td class="priority">1</td>
-							<td class="taskname">Test Task Name</td>
-							<td class="duedate">May 10</td>
-						</tr>
-						<tr>
-							<td class="priority">2</td>
-							<td class="taskname">Test Task Name</td>
-							<td class="duedate">May 10</td>
-						</tr>
-					</tbody>
-				</table>
-				
-			    <hr/>
-
-			    <div style="text-align: left;">
-			        <pre>
-			            Current scope variables:
-                        
-			        </pre>
-			    </div>
-
-			    <hr/>
-
-			    <footer>
-			        <div class="container">
-			            <p class="text-muted credit">
-			                Copyright &copy; Daniel Stephenson 2014 &middot;
-			            </p>
-			        </div>
-			    </footer>
-			</div>
-        </div>
+        <div ng-view></div>
 
         <!-- javascript -->
         <script src="//code.jquery.com/jquery-2.1.0.min.js"></script>
         <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+
+        <script src="js/app.js"></script>
+        <script src="js/controllers.js"></script>
     </body>
 </html>
