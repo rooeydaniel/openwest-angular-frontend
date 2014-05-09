@@ -413,14 +413,29 @@ Create Tasks
 1. Add a form to your tasks template
 ```
     <form class="form-inline">
-        <input id="task-name" type="text" class="form-control" ng-model="task.name" placeholder="Task Name"/><br/>
-        <input id="task-description" type="text" class="form-control" ng-model="task.description"
-               placeholder="Task Description"/></br>
-        <input id="task-due-date" type="text" class="form-control" ng-model="task.due_date" placeholder="YYYY-MM-DD HH:MM"/><br/>
-        <input id="task-priority" type="text" class="form-control" ng-model="task.priority" placeholder="Priority"/><br/><br/>
-        <select class="form-control" ng-model="task.category" ng-options="category.id as category.name for category in categories"></select><br/><br/>
-        <select class="form-control" multiple ng-model="task.tags" ng-options="tag.id as tag.name for tag in tags"></select><br/><br/>
-        <button id="add-btn" class="btn btn-success" ng-click="addTask(task);">Add Task</button>
+        <div class="row">
+            <div class="col-md-6 text-right">
+                <input id="task-name" type="text" class="form-control" ng-model="task.name"
+                       placeholder="Task Name"/><br/>
+                <input id="task-description" type="text" class="form-control" ng-model="task.description"
+                       placeholder="Task Description"/></br>
+                <input id="task-due-date" type="text" class="form-control" ng-model="task.due_date"
+                       placeholder="YYYY-MM-DD HH:MM"/><br/>
+                <input id="task-priority" type="text" class="form-control" ng-model="task.priority"
+                       placeholder="Priority"/>
+            </div>
+            <div class="col-md-6 text-left">
+                <select class="form-control" ng-model="task.category"
+                        ng-options="category.id as category.name for category in categories"></select><br/><br/>
+                <select class="form-control" multiple ng-model="task.tags"
+                        ng-options="tag.id as tag.name for tag in tags"></select><br/><br/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <button id="add-btn" class="btn btn-success" ng-click="addTask(task);">Add Task</button>
+            </div>
+        </div>
     </form>
 
     <div style="padding-bottom: 40px;"></div>
@@ -461,4 +476,26 @@ Create Tasks
         .then(function(tags) {
             $scope.tags = tags;
         });
+```
+
+5. Add CSRF Token to headers being sent to server
+```
+    .run(function ($http, $cookies) {
+        $http.defaults.headers.common['X-CSRFToken'] = $cookies['csrftoken'];
+
+//        toastr.options = {
+//            "positionClass": "toast-top-center"
+//        };
+    });
+```
+
+6. Add toastr success message
+```
+    toastr.success('You successfully added a new task!');
+```
+
+7. Add toastr dependencies
+```
+    <link href="//cdn.jsdelivr.net/toastr/2.0.1/toastr.css" rel="stylesheet"/>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.16/angular-cookies.js"></script>
 ```

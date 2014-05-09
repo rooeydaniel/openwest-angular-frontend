@@ -40,6 +40,8 @@ angular.module('TaskApp.controllers', [])
                     $scope.task.priority = '';
                     $scope.task.category = '';
                     $scope.task.tags = '';
+
+                    toastr.success('You successfully added a new task!');
                 });
         };
     }]);
