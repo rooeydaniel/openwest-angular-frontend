@@ -5,8 +5,8 @@ angular.module('TaskApp.services', [])
         var editTaskModal;
 
         this.show = function(task, tasks) {
-            var categories = Restangular.one('categories').getList();
-            var tags = Restangular.one('tags').getList();
+            var categories = Restangular.all('categories').getList();
+            var tags = Restangular.all('tags').getList();
 
             editTaskModal = $modal.open({
                 templateUrl: 'partials/edit-task.tpl.html',

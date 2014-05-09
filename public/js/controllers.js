@@ -10,6 +10,7 @@ angular.module('TaskApp.controllers', [])
         $scope.tasks = {};
         $scope.categories = {};
         $scope.tags = {};
+        $scope.deleteButton = false;
 
         $scope.tasksLoaded = false;
         Restangular.one('tasks').getList()
@@ -49,7 +50,7 @@ angular.module('TaskApp.controllers', [])
             EditTaskModal.show(task, $scope.tasks);
         };
 
-        $scope.$on('Task:updated', function(event, obj) {
+        $scope.$on('Task:updated', function (event, obj) {
             for (var i = 0; i < $scope.tasks.length; i++) {
                 if ($scope.tasks[i].id == obj.task.id) {
                     $scope.tasks[i] = obj.task;
@@ -57,6 +58,32 @@ angular.module('TaskApp.controllers', [])
                 }
             }
         });
+
+        $scope.confirm = function () {
+            $scope.deleteButton = true;
+        };
+
+        $scope.cancelDelete = function () {
+            $scope.deleteButton = false;
+        };
+
+        $scope.removeTask = function (task) {
+            var taskId = task.id;
+
+            Restangular.one('tasks', task.id).remove()
+                .then(function () {
+                    toastr.success('Task was deleted');
+
+                    for (var i = 0; i < $scope.tasks.length; i++) {
+                        if ($scope.tasks[i].id == taskId) {
+                            $scope.tasks.splice(i, 1);
+                            break;
+                        }
+                    }
+
+                    $scope.deleteButton = false;
+                });
+        };
     }])
     .controller('EditTaskModalController', ['$scope', '$modalInstance', 'Restangular', 'task', 'categories', 'tags', function ($scope, $modalInstance, Restangular, task, categories, tags) {
         $scope.task = (task) ? angular.copy(task) : {};
