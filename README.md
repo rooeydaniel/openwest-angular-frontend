@@ -499,3 +499,134 @@ Create Tasks
     <link href="//cdn.jsdelivr.net/toastr/2.0.1/toastr.css" rel="stylesheet"/>
     <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.16/angular-cookies.js"></script>
 ```
+
+Update Tasks
+------------
+1. Add edit button to task page
+```
+    <td style="text-align: right;">
+        <button class="btn btn-primary" ng-click="editTask(task)">Edit</button>
+    </td>
+```
+
+2. Create editTask function on scope in TasksController
+```
+    $scope.editTask = function (task) {
+        EditTaskModal.show(task, $scope.tasks);
+    };
+```
+
+3. Add new services.js in js folder with EditTaskModal service
+```
+    'use strict';
+
+    angular.module('TaskApp.services', [])
+        .service('EditTaskModal', ['$rootScope', '$modal', 'Restangular', function($rootScope, $modal, Restangular) {
+            var editTaskModal;
+
+            this.show = function(task, tasks) {
+                var categories = Restangular.one('categories').getList();
+                var tags = Restangular.one('tags').getList();
+
+                editTaskModal = $modal.open({
+                    templateUrl: 'partials/edit-task.tpl.html',
+                    controller: 'EditTaskModalController',
+                    resolve: {
+                        task: function() { return task; },
+                        categories: function() { return categories; },
+                        tags: function() { return tags; }
+                    }
+                });
+
+                editTaskModal.result.then(function(obj) {
+                    $rootScope.$broadcast('Task:updated', { task: obj.task });
+                });
+            };
+        }]);
+```
+
+4. Add new services.js to index.html
+```
+    <script src="js/services.js"></script>
+```
+
+5. Add ui.bootstrap dependency and TaskApp.services module dependency to app.js
+```
+    angular.module('TaskApp', ['ngRoute', 'ngCookies', 'restangular', 'ui.bootstrap', 'TaskApp.controllers', 'TaskApp.filters', 'TaskApp.services'])
+```
+
+6. Add ui.bootstrap and ui.bootstrap-tpls dependencies to index.html
+```
+    <script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.10.0/ui-bootstrap.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.10.0/ui-bootstrap-tpls.min.js"></script>
+```
+
+7. In step 3 above, we broadcast an event (that the task was updated), we'll add a listener to the TasksController
+```
+    $scope.$on('Task:updated', function(event, obj) {
+        for (var i = 0; i < $scope.tasks.length; i++) {
+            if ($scope.tasks[i].id == obj.task.id) {
+                $scope.tasks[i] = obj.task;
+                break;
+            }
+        }
+    });
+```
+
+8. As part of the modal service we declare a templateUrl and controller - add the template in your partials folder
+```
+    <div class="modal-header">
+        <button type="button" class="close" ng-click="cancel()">&times;</button>
+        <h3>Edit Task</h3>
+    </div>
+    <div class="modal-body">
+        <form class="form-inline">
+            <div class="row">
+                <div class="col-md-6 text-right">
+                    <input id="task-name" type="text" class="form-control" ng-model="task.name"
+                           placeholder="Task Name"/><br/>
+                    <input id="task-description" type="text" class="form-control" ng-model="task.description"
+                           placeholder="Task Description"/></br>
+                    <input id="task-due-date" type="text" class="form-control" ng-model="task.due_date"
+                           placeholder="YYYY-MM-DD HH:MM"/><br/>
+                    <input id="task-priority" type="text" class="form-control" ng-model="task.priority"
+                           placeholder="Priority"/>
+                </div>
+                <div class="col-md-6 text-left">
+                    <select class="form-control" ng-model="task.category"
+                            ng-options="category.id as category.name for category in categories"></select><br/><br/>
+                    <select class="form-control" multiple ng-model="task.tags"
+                            ng-options="tag.id as tag.name for tag in tags"></select><br/><br/>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-click="save(task)">Save</button>
+        <button class="btn" ng-click="cancel()">Close</button>
+    </div>
+```
+
+9. Now add the controller to your controllers.js file
+```
+    .controller('EditTaskModalController', ['$scope', '$modalInstance', 'Restangular', 'task', 'categories', 'tags', function ($scope, $modalInstance, Restangular, task, categories, tags) {
+        $scope.task = (task) ? angular.copy(task) : {};
+        $scope.categories = (categories) ? angular.copy(categories) : {};
+        $scope.tags = (tags) ? angular.copy(tags) : {};
+
+        $scope.save = function (obj) {
+            var task = obj;
+
+            Restangular.one('tasks', task.id).customPUT(task)
+                .then(function (task) {
+                    toastr.success('Task was updated successfully!');
+
+                    $modalInstance.close({task: task});
+                });
+        };
+
+        $scope.cancel = function () {
+            $modalInstance.dismiss('cancel');
+        };
+    }])
+```

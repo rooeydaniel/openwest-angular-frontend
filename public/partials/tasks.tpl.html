@@ -58,7 +58,9 @@
                         <td><span ng-bind="task.due_date | date: 'longDate'"></span></td>
                         <td><span ng-bind="task.name"></span></td>
                         <td><span ng-bind="task.description"></span></td>
-                        <td>&nbsp;</td>
+                        <td style="text-align: right;">
+                            <button class="btn btn-primary" ng-click="editTask(task)">Edit</button>
+                        </td>
                     </tr>
                 </tbody>
                 <tbody ng-hide="tasks.length">
