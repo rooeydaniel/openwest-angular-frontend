@@ -59,7 +59,12 @@
                         <td><span ng-bind="task.name"></span></td>
                         <td><span ng-bind="task.description"></span></td>
                         <td style="text-align: right;">
-                            <button class="btn btn-primary" ng-click="editTask(task)">Edit</button>
+                            <div ng-show="deleteButton">Delete Task?
+                                <button class="btn btn-danger" ng-click="removeTask(task)">Yes</button>
+                                <button class="btn btn-info" ng-click="cancelDelete()">No</button>
+                            </div>
+                            <button class="btn btn-danger" ng-hide="deleteButton" ng-click="confirm()">Delete</button>
+                            <button class="btn btn-primary" ng-hide="deleteButton" ng-click="editTask(task)">Edit</button>
                         </td>
                     </tr>
                 </tbody>

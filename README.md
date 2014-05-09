@@ -630,3 +630,49 @@ Update Tasks
         };
     }])
 ```
+
+Delete Task
+-----------
+1. Add delete button, along with confirmation and cancel, to tasks template
+```
+    <div ng-show="deleteButton">Delete Task?
+        <button class="btn btn-danger" ng-click="removeTask(task)">Yes</button>
+        <button class="btn btn-info" ng-click="cancelDelete()">No</button>
+    </div>
+    <button class="btn btn-danger" ng-hide="deleteButton" ng-click="confirm()">Delete</button>
+```
+
+2. Add the confirm function to the scope
+```
+    $scope.confirm = function () {
+        $scope.deleteButton = true;
+    };
+```
+
+3. Add the cancelDelete function to the scope
+```
+    $scope.cancelDelete = function () {
+        $scope.deleteButton = false;
+    };
+```
+
+4. Add the removeTask function to the scope
+```
+    $scope.removeTask = function (task) {
+        var taskId = task.id;
+
+        Restangular.one('tasks', task.id).remove()
+            .then(function () {
+                toastr.success('Task was deleted');
+
+                for (var i = 0; i < $scope.tasks.length; i++) {
+                    if ($scope.tasks[i].id == taskId) {
+                        $scope.tasks.splice(i, 1);
+                        break;
+                    }
+                }
+
+                $scope.deleteButton = false;
+            });
+    };
+```
