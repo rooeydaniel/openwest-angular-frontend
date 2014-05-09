@@ -1,6 +1,6 @@
 'use strict';
 
-var taskApp = angular.module('TaskApp', ['ngRoute', 'restangular', 'TaskApp.controllers', 'TaskApp.filters'])
+var taskApp = angular.module('TaskApp', ['ngRoute', 'ngCookies', 'restangular', 'TaskApp.controllers', 'TaskApp.filters'])
     .config(['$routeProvider', 'RestangularProvider', function($routeProvider, RestangularProvider) {
         $routeProvider
             .when('/dashboard', {
@@ -18,4 +18,11 @@ var taskApp = angular.module('TaskApp', ['ngRoute', 'restangular', 'TaskApp.cont
             });
 
         RestangularProvider.setBaseUrl('http://localhost:8001');
-    }]);
+    }])
+    .run(function ($http, $cookies) {
+        $http.defaults.headers.common['X-CSRFToken'] = $cookies['csrftoken'];
+
+//        toastr.options = {
+//            "positionClass": "toast-top-center"
+//        };
+    });
