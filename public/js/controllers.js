@@ -8,13 +8,38 @@ angular.module('TaskApp.controllers', [])
     }])
     .controller('TasksController', ['$scope', 'Restangular', function($scope, Restangular) {
         $scope.tasks = {};
+        $scope.categories = {};
+        $scope.tags = {};
 
         $scope.tasksLoaded = false;
         Restangular.one('tasks').getList()
             .then(function(tasks) {
-                console.log('Tasks loaded...');
                 $scope.tasks = tasks;
 
                 $scope.tasksLoaded = true;
             });
+
+        Restangular.one('categories').getList()
+            .then(function(categories) {
+                $scope.categories = categories;
+            });
+
+        Restangular.one('tags').getList()
+            .then(function(tags) {
+                $scope.tags = tags;
+            });
+
+        $scope.addTask = function(task) {
+            Restangular.all('tasks').customPOST(task)
+                .then(function (newTask) {
+                    $scope.tasks.push(newTask)
+
+                    $scope.task.name = '';
+                    $scope.task.description = '';
+                    $scope.task.due_date = '';
+                    $scope.task.priority = '';
+                    $scope.task.category = '';
+                    $scope.task.tags = '';
+                });
+        };
     }]);

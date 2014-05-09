@@ -407,3 +407,58 @@ Search Tasks
 ```
     var taskApp = angular.module('TaskApp', ['ngRoute', 'restangular', 'TaskApp.controllers', 'TaskApp.filters'])
 ```
+
+Create Tasks
+------------
+1. Add a form to your tasks template
+```
+    <form class="form-inline">
+        <input id="task-name" type="text" class="form-control" ng-model="task.name" placeholder="Task Name"/><br/>
+        <input id="task-description" type="text" class="form-control" ng-model="task.description"
+               placeholder="Task Description"/></br>
+        <input id="task-due-date" type="text" class="form-control" ng-model="task.due_date" placeholder="YYYY-MM-DD HH:MM"/><br/>
+        <input id="task-priority" type="text" class="form-control" ng-model="task.priority" placeholder="Priority"/><br/><br/>
+        <select class="form-control" ng-model="task.category" ng-options="category.id as category.name for category in categories"></select><br/><br/>
+        <select class="form-control" multiple ng-model="task.tags" ng-options="tag.id as tag.name for tag in tags"></select><br/><br/>
+        <button id="add-btn" class="btn btn-success" ng-click="addTask(task);">Add Task</button>
+    </form>
+
+    <div style="padding-bottom: 40px;"></div>
+```
+
+2. Add addTask scope function to TasksController
+```
+    $scope.addTask = function(task) {
+        Restangular.all('tasks').customPOST(task)
+            .then(function (newTask) {
+                $scope.tasks.push(newTask)
+
+                $scope.task.name = '';
+                $scope.task.description = '';
+                $scope.task.due_date = '';
+                $scope.task.priority = '';
+                $scope.task.category = '';
+                $scope.task.tags = '';
+            });
+    };
+```
+
+3. Load categories from server as part of the new form
+```
+    $scope.categories = {};
+
+    Restangular.one('categories').getList()
+        .then(function(categories) {
+            $scope.categories = categories;
+        });
+```
+
+4. Load tags from the server as part of the new form
+```
+    $scope.tags = {};
+
+    Restangular.one('tags').getList()
+        .then(function(tags) {
+            $scope.tags = tags;
+        });
+```
