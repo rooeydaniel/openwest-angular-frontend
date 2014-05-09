@@ -676,3 +676,52 @@ Delete Task
             });
     };
 ```
+
+Deploy to Heroku
+----------------
+* Note: this goes hand in hand with the Deploy to Heroku section on the back-end
+
+1. From your project folder in your terminal, create a new Heroku site
+```
+    heroku create ow-angular-frontend
+```
+
+2. Add package.json
+```
+    {
+        "name": "angular",
+        "version": "0.10.23",
+        "description": "Djangular: Django and Angular Application",
+        "engines": {
+            "node": "~0.10.23"
+        },
+        "scripts": {
+            "test": "echo \"Error: no test specified\" && exit 1"
+        },
+        "repository": {
+            "type": "git",
+            "url": "https://github.com/rooeydaniel/openwest-angular-frontend.git"
+        },
+        "author": "Daniel Stephenson",
+        "license": "MIT",
+        "bugs": {
+            "url": "https://github.com/rooeydaniel/openwest-angular-frontend/issues"
+        },
+        "homepage": "https://github.com/rooeydaniel/openwest-angular-frontend"
+    }
+```
+
+3. Add Procfile
+```
+    web: node server/server.js
+```
+
+4. Change Restangular Base to backend URL at Heroku
+```
+    RestangularProvider.setBaseUrl('http://ow-django-backend.herokuapp.com');
+```
+
+5. Merge code from branch and push to Heroku
+```
+    git push heroku master
+```
