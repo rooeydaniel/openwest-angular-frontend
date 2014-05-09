@@ -349,3 +349,61 @@ we need to add the CORS middleware
 ```
 
 14. Now run your Web app and the progress will appear for a second, then your task list
+
+Search Tasks
+------------
+1. Add search box to tasks partial template
+```
+    <div class="row">
+        <div class="text-right col-md-3 pull-right">
+            <div class="input-group">
+                <input type="text" class="form-control" data-ng-model="search">
+                <span class="input-group-btn">
+                    <button class="btn btn-default" type="button">
+                        <span class="glyphicon glyphicon-search"></span>
+                    </button>
+                </span>
+            </div><!-- /input-group -->
+            <!-- /input-group -->
+        </div>
+    </div>
+```
+
+2. Add filter to the ng-repeat directive
+```
+    <tr ng-repeat="task in tasks | taskSearchFilter:search">
+```
+
+3. Create the custom filter in a new filters.js file
+```
+    'use strict';
+
+    angular.module('TaskApp.filters', [])
+        .filter('taskSearchFilter', function () {
+            return function (items, searchText) {
+                var filtered = [];
+
+                angular.forEach(items, function (item) {
+                    if (searchText != '' && searchText != undefined) {
+                        if (item.name.indexOf(searchText) != -1 || item.description.indexOf(searchText) != -1) {
+                            filtered.push(item);
+                        }
+                    } else {
+                        filtered.push(item);
+                    }
+                });
+
+                return filtered;
+            };
+        });
+```
+
+4. Add filters.js dependency to index.html
+```
+    <script src="js/filters.js"></script>
+```
+
+5. Add TaskApp.filters to the core module in app.js
+```
+    var taskApp = angular.module('TaskApp', ['ngRoute', 'restangular', 'TaskApp.controllers', 'TaskApp.filters'])
+```

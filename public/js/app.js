@@ -1,6 +1,6 @@
 'use strict';
 
-var taskApp = angular.module('TaskApp', ['ngRoute', 'restangular', 'TaskApp.controllers'])
+var taskApp = angular.module('TaskApp', ['ngRoute', 'restangular', 'TaskApp.controllers', 'TaskApp.filters'])
     .config(['$routeProvider', 'RestangularProvider', function($routeProvider, RestangularProvider) {
         $routeProvider
             .when('/dashboard', {
