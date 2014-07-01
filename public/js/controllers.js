@@ -20,14 +20,18 @@ angular.module('TaskApp.controllers', [])
                 $scope.tasksLoaded = true;
             });
 
+        $scope.categoriesLoaded = false;
         Restangular.one('categories').getList()
             .then(function (categories) {
                 $scope.categories = categories;
+                $scope.categoriesLoaded = true;
             });
 
+        $scope.tagsLoaded = false;
         Restangular.one('tags').getList()
             .then(function (tags) {
                 $scope.tags = tags;
+                $scope.tagsLoaded = true;
             });
 
         $scope.addTask = function (task) {

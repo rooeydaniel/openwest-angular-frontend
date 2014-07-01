@@ -17,7 +17,7 @@ angular.module('TaskApp', ['ngRoute', 'ngCookies', 'restangular', 'ui.bootstrap'
                 redirectTo: '/dashboard'
             });
 
-        RestangularProvider.setBaseUrl('http://ow-django-backend.herokuapp.com');
+        RestangularProvider.setBaseUrl('http://localhost:8001');
     }])
     .run(function ($http, $cookies) {
         $http.defaults.headers.common['X-CSRFToken'] = $cookies['csrftoken'];

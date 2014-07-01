@@ -725,3 +725,93 @@ Deploy to Heroku
 ```
     git push heroku master
 ```
+
+Deploy to Digital Ocean
+----------------------
+1. Create a new Digital Ocean account (if necessary) and log in
+2. Update your billing information
+3. Click on SSH Keys and add your local computer's SSH key
+4. Create a Droplet
+    A. Hostname: as1.dstephenson.dom
+    B. Select Size: 512 MB
+    C. Select Region: New York 2
+    D. Select Image: Ubuntu 14.04 x64
+    E. Add optional SSH Keys: Click your key to highlight
+    F. Settings: Enable VirtIO
+    G. Click Create Droplet
+5. SSH into Instance
+
+```
+    ssh root@IP_ADDRESS
+    vi /etc/hosts
+    
+        127.0.0.1       as1.dstephenson.dom as1  # this should replace the 127.0.1.1 line
+        IP_ADDRESS      as1.dstephenson.dom
+```
+
+6. Set up sudo capability
+
+```
+    adduser dstephenson
+    usermod -g dstephenson -G sudo dstephenson
+    exit
+```
+
+7. Update/Upgrade Packages
+```
+    ssh dstephenson@IP_ADDRESS
+    sudo apt-get update
+    sudo apt-get upgrade
+    exit
+    ssh dstephenson@IP_ADDRESS
+    sudo apt-get update
+    sudo apt-get upgrade
+    sudo shutdown -r 0
+```
+
+8. Install Apache
+```
+    sudo apt-get install apache2 apache2-bin apache2-mpm-prefork apache2-utils libexpat1 git
+    sudo vi /etc/apache2/httpd.conf
+    
+        ServerName localhost
+        
+    sudo vi /etc/apache2/sites-available/openwest.conf
+    
+        <VirtualHost *:80>
+            ServerAdmin admin@as1.dstephenson.dom
+            ServerName as1.dstephenson.dom
+
+            DocumentRoot /var/www/openwest/angular
+            DirectoryIndex index.html
+        </VirtualHost>
+        
+    sudo vi /etc/apache2/apache2.conf
+    
+        Include httpd.conf
+        
+    sudo mkdir -p /var/www/openwest
+    cd /var/www/openwest
+    sudo chown -R dstephenson:www-data /var/www/openwest/
+    git clone https://github.com/rooeydaniel/openwest-angular-frontend.git angular
+    sudo chown -R dstephenson:www-data /var/www/openwest/
+    sudo chmod -R 775 /var/www/openwest/
+    sudo chmod -R g+s /var/www/openwest/
+    
+    sudo a2ensite openwest
+    sudo service apache2 restart
+    exit
+    
+    sudo vi /etc/hosts
+    
+        IP_ADDRESS  as1.dstephenson.dom
+```
+
+9. Change Restangular Base to backend URL at Digital Ocean
+```
+    RestangularProvider.setBaseUrl('http://as1.dstephenson.dom/api');
+```
+
+10. Go to http://as1.dstephenson.dom in your browser
+
+* Note: if you do this first, the backend doesn't exist yet, so you can click from page to page, but nothing will load and you won't be able to add tasks, etc.
